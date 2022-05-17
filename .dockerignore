@@ -1,0 +1,5 @@
+# Ignore installed modules when building.
+**/node_modules
+.git/
+.gitignore
+.circleci/

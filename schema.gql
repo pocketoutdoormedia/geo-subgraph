@@ -1,0 +1,45 @@
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+directive @extends on INTERFACE | OBJECT
+
+directive @external on FIELD_DEFINITION | OBJECT
+
+directive @key(fields: String!) on INTERFACE | OBJECT
+
+directive @provides(fields: String!) on FIELD_DEFINITION
+
+directive @requires(fields: String!) on FIELD_DEFINITION
+
+input AddExampleInput {
+  id: Float!
+}
+
+type AddExamplePayload {
+  example: Example
+}
+
+type Example @extends @key(fields: "id") {
+  id: Float! @external
+}
+
+type Mutation {
+  addExample(data: AddExampleInput!): AddExamplePayload!
+}
+
+type Query {
+  _entities(representations: [_Any!]!): [_Entity]!
+  _service: _Service!
+  example(id: Float!): Example!
+}
+
+scalar _Any
+
+union _Entity = Example
+
+type _Service {
+  """The sdl representing the federated service capabilities. Includes federation directives, removes federation types, and includes rest of full schema after schema directives have been applied"""
+  sdl: String
+}

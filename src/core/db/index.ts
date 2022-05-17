@@ -1,0 +1,1 @@
+export { ExampleDb } from './example';

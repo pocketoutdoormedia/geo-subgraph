@@ -1,0 +1,51 @@
+#!/bin/bash
+
+# Script to get current task definition, and based on that add new ecr image
+# address to old template and remove attributes that are not needed, then we
+# send new task definition, get new revision number from output and update
+# service.
+set -e
+
+# Output the current Git commit.
+HASH="$(git rev-parse HEAD)"
+echo "$HASH" > version.txt
+GIT_HASH=`cat version.txt`
+
+AWS_ECR=285494004625.dkr.ecr.us-east-1.amazonaws.com
+AWS_REGION=us-east-1
+
+DOCKER_TAG=<service_name>
+REPOSITORY_URI=$AWS_ECR/$DOCKER_TAG
+
+ECS_SERVICE_NAME="$ECS_SERVICE_ROOT-<service_name>-service"
+ECS_TASK_FAMILY="$ECS_TASK_ROOT-<service_name>-task"
+ECR_IMAGE="$AWS_ECR/$DOCKER_TAG:$GIT_HASH"
+
+# Retrieve the latest task definition for our ECS Task, as JSON.
+TASK_DEFINITION=$(aws ecs describe-task-definition --task-definition "$ECS_TASK_FAMILY" --region $AWS_REGION)
+
+# Munge the task defintion, replacing the container defintition image with the
+# one we want to deploy.  Delete various attributes that we don't want.
+#
+# jq is a JSON command line parser tool.
+NEW_TASK_DEFINTIION=$(echo $TASK_DEFINITION | jq --arg IMAGE "$ECR_IMAGE" '.taskDefinition | .containerDefinitions[0].image = $IMAGE | .containerDefinitions[0].command = ["./bin/start"] | del(.taskDefinitionArn) | del(.revision) | del(.status) | del(.requiresAttributes) | del(.compatibilities) | del(.registeredAt) | del(.registeredBy)')
+# Register our new task definition.
+NEW_TASK_INFO=$(aws ecs register-task-definition --region $AWS_REGION --cli-input-json "$NEW_TASK_DEFINTIION")
+# Grab the new task revision (e.g., the 3 in foo-task:3).
+NEW_REVISION=$(echo $NEW_TASK_INFO | jq '.taskDefinition.revision')
+
+aws ecs update-service \
+    --no-cli-pager \
+    --output yaml \
+    --cluster ${ECS_CLUSTER} \
+    --service ${ECS_SERVICE_NAME} \
+    --task-definition ${ECS_TASK_FAMILY}:${NEW_REVISION}
+
+echo ""
+echo "=============================================================================="
+echo "DEPLOYED Container ${DOCKER_TAG}/${GIT_HASH}"
+echo "------------------------------------------------------------------------------"
+echo "    Cluster: ${ECS_CLUSTER}"
+echo "    Service: ${ECS_SERVICE_NAME}"
+echo "    Task:    ${ECS_TASK_FAMILY}:${NEW_REVISION}"
+echo "------------------------------------------------------------------------------"

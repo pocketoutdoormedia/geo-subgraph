@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# Build the docker image and tag it as latest & it's version.
+
+# We'll use the latest Git hash as the version portion of our Image tag.
+HASH="$(git rev-parse HEAD)"
+echo "$HASH" > version.txt
+
+# Our Image configuration
+DOCKER_TAG=<service_name>
+
+# POM AWS account ECR repo in us-east-1
+AWS_ECR=285494004625.dkr.ecr.us-east-1.amazonaws.com
+AWS_REGION=us-east-1
+
+REPOSITORY_URI=$AWS_ECR/$DOCKER_TAG
+
+# Build the image.
+docker build \
+    --tag $DOCKER_TAG:latest \
+    .
+
+# Tie docker to AWS ECR.  You will need ~/.aws/credentials for this to work.
+aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ECR
+
+# Tag and push the specific version.
+docker tag $DOCKER_TAG:latest $REPOSITORY_URI:$HASH
+docker push $REPOSITORY_URI:$HASH
+
+# Tag and push the latest alias.
+docker tag $DOCKER_TAG:latest $REPOSITORY_URI:latest
+docker push $REPOSITORY_URI:latest

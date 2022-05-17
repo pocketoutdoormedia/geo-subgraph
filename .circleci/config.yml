@@ -1,0 +1,153 @@
+version: 2.1
+orbs:
+  # This orb provides us with the `aws` cli tools.  It will pick up credentials
+  # from the environment.
+  # See: https://circleci.com/developer/orbs/orb/circleci/aws-cli
+  aws-cli: circleci/aws-cli@2.0.2
+  node: circleci/node@4.7.0
+
+jobs:
+  build-and-deploy:
+    executor: aws-cli/default
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+          version: 20.10.6
+      - aws-cli/setup
+      - run:
+          name: Build the docker image
+          command: ./bin/build
+      - run:
+          name: Deploy current version to ECS containers.
+          command: ./bin/deploy
+
+  publish-subgraph:
+    docker:
+      - image: cimg/node:16.12
+    steps:
+      - checkout
+      - run:
+          name: Install rover client
+          command: sudo npm install --global @apollo/rover
+      - run:
+          name: Publish subgraph
+          command: rover subgraph publish $GRAPH_VARIANT --schema ./schema.gql --name <subgraph_name>
+
+  lint:
+    docker:
+      - image: cimg/node:16.12
+
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: yarn
+      - run:
+          name: Run ESLint
+          command: yarn lint
+
+  prettier:
+    docker:
+      - image: cimg/node:16.12
+
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: yarn
+      - run:
+          name: Run Prettier
+          command: yarn prettier
+
+  validate-subgraph:
+    docker:
+      - image: cimg/node:16.12
+
+    steps:
+      - checkout
+      - run:
+          name: Install rover client
+          command: sudo npm install --global @apollo/rover
+      - run:
+          name: Validate schema
+          command: rover subgraph check $GRAPH_VARIANT --schema ./schema.gql --name <subgraph_name>
+
+  tsc:
+    docker:
+      - image: cimg/node:16.12
+
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: yarn
+      - run:
+          name: Generate Prisma types
+          command: yarn prisma:gen
+      - run:
+          name: Run Typescript compiler check
+          command: yarn build --noEmit
+
+workflows:
+  stage-and-deploy:
+    jobs:
+      - build-and-deploy:
+          name: build-and-deploy-staging
+          context: staging
+          filters:
+            branches:
+              only: main
+
+      - publish-subgraph:
+          name: publish-subgraph-staging
+          context: staging
+          requires:
+            - build-and-deploy-staging
+          filters:
+            branches:
+              only: main
+
+      - hold-for-approval:
+          type: approval
+          requires:
+            - publish-subgraph-staging
+
+      - validate-subgraph:
+          context: prod
+          requires:
+            - hold-for-approval
+          filters:
+            branches:
+              only: main
+
+      - build-and-deploy:
+          context: prod
+          requires:
+            - validate-subgraph
+          filters:
+            branches:
+              only: main
+
+      - publish-subgraph:
+          context: prod
+          requires:
+            - build-and-deploy
+          filters:
+            branches:
+              only: main
+
+  lint-and-prettier:
+    jobs:
+      - lint
+      - prettier
+
+  schema-check:
+    jobs:
+      - validate-subgraph:
+          context: staging
+          filters:
+            branches:
+              ignore:
+                - main
+
+  type-check:
+    jobs:
+      - tsc

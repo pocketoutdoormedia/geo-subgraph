@@ -1,0 +1,6 @@
+schema.gql
+dist
+yarn.lock
+.github
+.cspell/*
+README.md
