@@ -14,11 +14,11 @@ GIT_HASH=`cat version.txt`
 AWS_ECR=285494004625.dkr.ecr.us-east-1.amazonaws.com
 AWS_REGION=us-east-1
 
-DOCKER_TAG=<service_name>
+DOCKER_TAG=geo-subgraph
 REPOSITORY_URI=$AWS_ECR/$DOCKER_TAG
 
-ECS_SERVICE_NAME="$ECS_SERVICE_ROOT-<service_name>-service"
-ECS_TASK_FAMILY="$ECS_TASK_ROOT-<service_name>-task"
+ECS_SERVICE_NAME="$ECS_SERVICE_ROOT-geo-subgraph-service"
+ECS_TASK_FAMILY="$ECS_TASK_ROOT-geo-subgraph-task"
 ECR_IMAGE="$AWS_ECR/$DOCKER_TAG:$GIT_HASH"
 
 # Retrieve the latest task definition for our ECS Task, as JSON.

@@ -17,8 +17,8 @@ USER node
 RUN npm config set '@outside-interactive:registry' https://node.bit.dev
 
 # Drop the code into the user home directory.
-RUN mkdir -p /home/node/<service_name>
-WORKDIR /home/node/<service_name>
+RUN mkdir -p /home/node/geo-subgraph
+WORKDIR /home/node/geo-subgraph
 
 COPY --chown=node:node . .
 

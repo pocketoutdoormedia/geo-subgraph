@@ -32,7 +32,7 @@ jobs:
           command: sudo npm install --global @apollo/rover
       - run:
           name: Publish subgraph
-          command: rover subgraph publish $GRAPH_VARIANT --schema ./schema.gql --name <subgraph_name>
+          command: rover subgraph publish $GRAPH_VARIANT --schema ./schema.gql --name geo
 
   lint:
     docker:
