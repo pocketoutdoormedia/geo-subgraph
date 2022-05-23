@@ -7,9 +7,9 @@ services:
     environment:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
-      POSTGRES_DB: <db_name>
+      POSTGRES_DB: geo_db
     ports:
-      - '5432:5432'
+      - '5433:5433'
   pgadmin:
     container_name: pgadmin4_container
     image: dpage/pgadmin4
