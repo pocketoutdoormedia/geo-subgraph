@@ -14,12 +14,30 @@ directive @requires(fields: String!) on FIELD_DEFINITION
 
 type Hike {
   bounds: [Float!]!
+  centroid: [Float!]!
+  country: String!
+  cover_photo_id: String
+  id: String!
+  known_route_id: Float!
+  kr_ascent: Float!
+  kr_difficulty: Float!
+  kr_difficulty_class: String!
+  kr_driveable: Boolean!
+  kr_length: Float!
+  kr_route_type: String!
+  kr_tobler_time: Boolean
+  land: String
   location: [Float!]!
+  osm_id: Float!
+  permalink: String!
+  permalink_api: String!
+  permalink_api_v2: String!
   stars: Float!
   state: String!
   subtitle: String!
   thumbnail_url: String
   title: String!
+  type: String!
 }
 
 input HikeFilter {
@@ -35,7 +53,7 @@ type Hikes {
 
 type Query {
   _service: _Service!
-  getHikesCoord(lat: Float!, lon: Float!): Hikes!
+  getHikesCoord(lat: Float!, limit: Float, lon: Float!): Hikes!
 }
 
 type _Service {

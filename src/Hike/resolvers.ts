@@ -6,20 +6,21 @@ import { DataSources } from '..';
 export class HikeResolver {
   @Query((returns) => Hikes)
   async getHikesCoord(
-    @Args() { lat, lon }: HikeArgs,
+    @Args() { lat, lon, limit }: HikeArgs,
     @Ctx() ctx: { dataSources: DataSources }
   ): Promise<Hikes> {
-    const hike = await ctx.dataSources.gaiaApi.getNearbyHikes({
+    const hikes = await ctx.dataSources.gaiaApi.getNearbyHikes({
       lat: lat,
-      lon: lon
+      lon: lon,
+      limit: limit
     });
-    return this.handleResponse(hike);
+    return this.handleResponse(hikes);
   }
-  handleResponse(hike: Hikes): Hikes {
-    if (!hike) {
+  handleResponse(hikes: Hikes): Hikes {
+    if (!hikes) {
       throw new Error(`No hikes found`);
     }
 
-    return hike;
+    return hikes;
   }
 }
