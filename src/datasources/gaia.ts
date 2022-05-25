@@ -11,7 +11,7 @@ export class GaiaAPI extends RESTDataSource {
   async getNearbyHikes({
     lat,
     lon,
-    limit = 10,
+    limit,
     min_ascent,
     max_ascent,
     min_length,
@@ -21,14 +21,29 @@ export class GaiaAPI extends RESTDataSource {
     min_stars,
     max_stars
   }: HikeArgs): Promise<Hikes> {
-    const url =
+    const filter_options = {
+      limit: limit,
+      min_ascent: min_ascent,
+      max_ascent: max_ascent,
+      min_length: min_length,
+      max_length: max_length,
+      min_difficulty: min_difficulty,
+      max_difficulty: max_difficulty,
+      min_stars: min_stars,
+      max_stars: max_stars
+    };
+
+    let url =
       this.baseURL +
       'search/discover?result_types=hiking&lat=' +
       lat +
       '&lon=' +
-      lon +
-      '&limit=' +
-      limit;
+      lon;
+    Object.entries(filter_options).forEach(([key, value]) => {
+      if (value != null) {
+        url += '&' + key + '=' + value;
+      }
+    });
     const { ...response } = await this.get(url);
     const hikes = toHikes(response['results']);
     return new Hikes({
