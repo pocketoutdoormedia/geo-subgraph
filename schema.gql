@@ -53,7 +53,7 @@ type Hikes {
 
 type Query {
   _service: _Service!
-  getHikesCoord(lat: Float!, limit: Float, lon: Float!): Hikes!
+  getHikesCoord(lat: Float!, limit: Float, lon: Float!, max_ascent: Float, max_difficulty: Float, max_length: Float, max_stars: Float, min_ascent: Float, min_difficulty: Float, min_length: Float, min_stars: Float): Hikes!
 }
 
 type _Service {

@@ -8,16 +8,27 @@ export class GaiaAPI extends RESTDataSource {
     this.baseURL = 'https://www.gaiagps.com/api/';
   }
 
-  async getNearbyHikes({ lat, lon, limit }: HikeArgs): Promise<Hikes> {
-    let url =
+  async getNearbyHikes({
+    lat,
+    lon,
+    limit = 10,
+    min_ascent,
+    max_ascent,
+    min_length,
+    max_length,
+    min_difficulty,
+    max_difficulty,
+    min_stars,
+    max_stars
+  }: HikeArgs): Promise<Hikes> {
+    const url =
       this.baseURL +
       'search/discover?result_types=hiking&lat=' +
       lat +
       '&lon=' +
-      lon;
-    if (limit != null) {
-      url += '&limit=' + limit;
-    }
+      lon +
+      '&limit=' +
+      limit;
     const { ...response } = await this.get(url);
     const hikes = toHikes(response['results']);
     return new Hikes({

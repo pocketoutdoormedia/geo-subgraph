@@ -195,4 +195,28 @@ export class HikeArgs {
 
   @Field({ nullable: true })
   limit?: number;
+
+  @Field({ nullable: true })
+  min_ascent?: number;
+
+  @Field({ nullable: true })
+  max_ascent?: number;
+
+  @Field({ nullable: true })
+  min_length?: number;
+
+  @Field({ nullable: true })
+  max_length?: number;
+
+  @Field({ nullable: true })
+  min_difficulty?: number;
+
+  @Field({ nullable: true })
+  max_difficulty?: number;
+
+  @Field({ nullable: true })
+  min_stars?: number;
+
+  @Field({ nullable: true })
+  max_stars?: number;
 }
