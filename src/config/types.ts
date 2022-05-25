@@ -1,9 +1,4 @@
-import { ExampleApp } from '../core/app';
-
 export type Context = {
-  app: {
-    exampleApp: ExampleApp;
-  };
   user?: {
     aud: string;
     exp: string;

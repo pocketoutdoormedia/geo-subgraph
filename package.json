@@ -9,8 +9,6 @@
     "lint": "eslint .",
     "prepare": "husky install",
     "prettier": "prettier --check .",
-    "prisma:gen": "npx prisma generate",
-    "prisma:deploy": "npx prisma migrate deploy",
     "start:dev": "ts-node-dev --inspect --respawn --transpile-only ./src/index.ts",
     "start": "node ./dist",
     "test": "jest"
@@ -22,7 +20,6 @@
     "@outside-interactive/gql-utils.plugins.check-headers": "^0.0.2",
     "@outside-interactive/gql-utils.plugins.database-connection": "^0.0.3",
     "@outside-interactive/gql-utils.service-clients.ssm": "^0.0.2",
-    "@prisma/client": "^3.12.0",
     "@types/ioredis": "^4.28.5",
     "apollo-datasource-rest": "^3.5.3",
     "apollo-server": "^3.5.0",
@@ -36,7 +33,6 @@
     "graphql-scalars": "^1.14.1",
     "ioredis": "^4.28.2",
     "oso": "^0.26.0",
-    "prisma": "^3.12.0",
     "reflect-metadata": "^0.1.13",
     "type-graphql": "^1.1.1",
     "typescript": "^4.5.4"
@@ -54,9 +50,6 @@
     "lint-staged": ">=10",
     "prettier": "^2.5.1",
     "ts-node-dev": "^1.1.8"
-  },
-  "prisma": {
-    "seed": "node prisma/seed.js"
   },
   "lint-staged": {
     "*.{ts,json}": [

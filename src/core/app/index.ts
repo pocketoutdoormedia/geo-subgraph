@@ -1,1 +1,0 @@
-export { ExampleApp } from './example';

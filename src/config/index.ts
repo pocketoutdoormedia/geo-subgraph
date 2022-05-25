@@ -1,15 +1,25 @@
 import { BaseRedisCache } from 'apollo-server-cache-redis';
 import GraphQLServerOptions from 'apollo-server-core/dist/graphqlOptions';
 import Redis from 'ioredis';
-import { ExampleApp } from '../core/app';
 import { Env } from './constants';
 
-export const app = {
-  exampleApp: new ExampleApp()
+export const user = {
+  aud: '',
+  exp: '',
+  iat: '',
+  sub: '',
+  jti: '',
+  authenticationType: '',
+  email: '',
+  email_verified: false,
+  preferred_username: '',
+  applicationId: '',
+  scope: '',
+  // ! THIS IS A STUB FOR NOW UNTIL AUTH IS ACTUALLY IN PLACE
+  roles: []
 };
-
 export const context = {
-  app
+  user
 };
 
 export const cache: GraphQLServerOptions['cache'] =
