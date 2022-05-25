@@ -2,15 +2,51 @@ import { ArgsType, Field, InputType, ObjectType } from 'type-graphql';
 
 @ObjectType()
 export class Hike {
-  constructor({ title, subtitle }: { title: string; subtitle: string }) {
+  constructor({
+    title,
+    subtitle,
+    bounds,
+    location,
+    thumbnail_url,
+    state,
+    stars
+  }: {
+    title: string;
+    subtitle: string;
+    bounds: number[];
+    location: number[];
+    thumbnail_url: string;
+    state: string;
+    stars: number;
+  }) {
     this.title = title;
     this.subtitle = subtitle;
+    this.state = state;
+    this.bounds = bounds;
+    this.location = location;
+    this.thumbnail_url = thumbnail_url;
+    this.stars = stars;
   }
   @Field()
   title: string;
 
   @Field()
   subtitle: string;
+
+  @Field((type) => [Number])
+  bounds: number[];
+
+  @Field((type) => [Number])
+  location: number[];
+
+  @Field({ nullable: true })
+  thumbnail_url: string;
+
+  @Field()
+  state: string;
+
+  @Field()
+  stars: number;
 }
 
 @ObjectType()
