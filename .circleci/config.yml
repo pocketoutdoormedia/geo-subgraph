@@ -32,7 +32,7 @@ jobs:
           command: sudo npm install --global @apollo/rover
       - run:
           name: Publish subgraph
-          command: rover subgraph publish $GRAPH_VARIANT --schema ./schema.gql --name <subgraph_name>
+          command: rover subgraph publish $GRAPH_VARIANT --schema ./schema.gql --name geo
 
   lint:
     docker:
@@ -69,7 +69,7 @@ jobs:
           command: sudo npm install --global @apollo/rover
       - run:
           name: Validate schema
-          command: rover subgraph check $GRAPH_VARIANT --schema ./schema.gql --name <subgraph_name>
+          command: rover subgraph check $GRAPH_VARIANT --schema ./schema.gql --name geo
 
   tsc:
     docker:
@@ -79,9 +79,6 @@ jobs:
       - checkout
       - node/install-packages:
           pkg-manager: yarn
-      - run:
-          name: Generate Prisma types
-          command: yarn prisma:gen
       - run:
           name: Run Typescript compiler check
           command: yarn build --noEmit

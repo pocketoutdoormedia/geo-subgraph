@@ -1,1 +1,0 @@
-export { ExampleDb } from './example';

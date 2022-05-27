@@ -1,19 +1,1 @@
-#!/bin/bash
-
-# see what version of the app this is
-VERSION=$(head -n 1 version.txt)
-
-# see if another migration was run in the last 3 minutes
-MIGR_STAT=$(redis-cli -h $REDIS_HOST -p $REDIS_PORT get migrate)
-
-# if nobody got here first or there hasn't been a migration run in the last 3 minutes...
-if [ "$MIGR_STAT" != "$VERSION" ]; then
-  echo "RUNNING MIGRATIONS"
-  # set the flag to keep others from running migrations at the same time
-  redis-cli -h $REDIS_HOST -p $REDIS_PORT set migrate $VERSION EX 180
-
-  # run migrations
-  npx prisma migrate deploy
-fi
-
 node dist/index.js

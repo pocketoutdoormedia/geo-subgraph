@@ -1,6 +1,5 @@
 schema {
   query: Query
-  mutation: Mutation
 }
 
 directive @extends on INTERFACE | OBJECT
@@ -13,31 +12,49 @@ directive @provides(fields: String!) on FIELD_DEFINITION
 
 directive @requires(fields: String!) on FIELD_DEFINITION
 
-input AddExampleInput {
-  id: Float!
+type Hike {
+  bounds: [Float!]!
+  centroid: [Float!]!
+  country: String!
+  cover_photo_id: String
+  id: String!
+  known_route_id: Float!
+  kr_ascent: Float!
+  kr_difficulty: Float!
+  kr_difficulty_class: String!
+  kr_driveable: Boolean!
+  kr_length: Float!
+  kr_route_type: String!
+  kr_tobler_time: Boolean
+  land: String
+  location: [Float!]!
+  osm_id: Float!
+  permalink: String!
+  permalink_api: String!
+  permalink_api_v2: String!
+  stars: Float!
+  state: String!
+  subtitle: String!
+  thumbnail_url: String
+  title: String!
+  type: String!
 }
 
-type AddExamplePayload {
-  example: Example
+input HikeFilter {
+  lat: Float!
+  lon: Float!
 }
 
-type Example @extends @key(fields: "id") {
-  id: Float! @external
-}
-
-type Mutation {
-  addExample(data: AddExampleInput!): AddExamplePayload!
+type Hikes {
+  hikes: [Hike!]!
+  lat: Float!
+  lon: Float!
 }
 
 type Query {
-  _entities(representations: [_Any!]!): [_Entity]!
   _service: _Service!
-  example(id: Float!): Example!
+  getHikesCoord(lat: Float!, limit: Float, lon: Float!, max_ascent: Float, max_difficulty: Float, max_length: Float, max_stars: Float, min_ascent: Float, min_difficulty: Float, min_length: Float, min_stars: Float): Hikes!
 }
-
-scalar _Any
-
-union _Entity = Example
 
 type _Service {
   """The sdl representing the federated service capabilities. Includes federation directives, removes federation types, and includes rest of full schema after schema directives have been applied"""

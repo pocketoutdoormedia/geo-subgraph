@@ -1,5 +1,5 @@
 import { AuthChecker } from 'type-graphql';
-import { Context } from '../../config';
+import { Context } from '../config';
 import {
   initOso,
   User,
