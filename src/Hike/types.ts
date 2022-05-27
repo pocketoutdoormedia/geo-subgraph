@@ -1,4 +1,3 @@
-import { bool } from 'aws-sdk/clients/signer';
 import { ArgsType, Field, InputType, ObjectType } from 'type-graphql';
 
 @ObjectType()
@@ -45,10 +44,10 @@ export class Hike {
     kr_ascent: number;
     kr_difficulty: number;
     kr_difficulty_class: string;
-    kr_driveable: bool;
+    kr_driveable: boolean;
     kr_length: number;
     kr_route_type: string;
-    kr_tobler_time: bool;
+    kr_tobler_time: boolean;
     land: string;
     osm_id: number;
     permalink: string;
@@ -128,7 +127,7 @@ export class Hike {
   kr_difficulty_class: string;
 
   @Field((type) => Boolean)
-  kr_driveable: bool;
+  kr_driveable: boolean;
 
   @Field()
   kr_length: number;
@@ -137,7 +136,7 @@ export class Hike {
   kr_route_type: string;
 
   @Field((type) => Boolean, { nullable: true })
-  kr_tobler_time: bool;
+  kr_tobler_time: boolean;
 
   @Field({ nullable: true })
   land: string;
