@@ -1,5 +1,6 @@
 import './tracer';
 import 'reflect-metadata';
+import 'dotenv/config';
 import { buildFederatedSchema } from '@outside-interactive/gql-utils.build-federated-schema';
 import { checkHeaders } from '@outside-interactive/gql-utils.plugins.check-headers';
 import { ApolloServer } from 'apollo-server';
