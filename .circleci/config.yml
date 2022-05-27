@@ -17,10 +17,10 @@ jobs:
       - aws-cli/setup
       - run:
           name: Build the docker image
-          command: ./bin/build
+          command: bash ./bin/build
       - run:
           name: Deploy current version to ECS containers.
-          command: ./bin/deploy
+          command: bash ./bin/deploy
 
   publish-subgraph:
     docker:
