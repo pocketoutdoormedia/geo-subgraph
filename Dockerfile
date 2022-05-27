@@ -23,7 +23,6 @@ WORKDIR /home/node/geo-subgraph
 COPY --chown=node:node . .
 
 RUN yarn
-# RUN yarn prisma:gen
 RUN yarn build
 
 # Our server will listen on port 8000.
