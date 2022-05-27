@@ -69,7 +69,7 @@ jobs:
           command: sudo npm install --global @apollo/rover
       - run:
           name: Validate schema
-          command: rover subgraph check $GRAPH_VARIANT --schema ./schema.gql --name <subgraph_name>
+          command: rover subgraph check $GRAPH_VARIANT --schema ./schema.gql --name geo
 
   tsc:
     docker:
