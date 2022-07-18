@@ -2,8 +2,8 @@ import tracer from 'dd-trace';
 import { Env } from './config/constants';
 
 // Turn on DataDog APM when DD_ENV is stage or prod.
-const DATADOG_ENVS = ['stage', 'prod'];
-if (DATADOG_ENVS.indexOf(process.env.DD_ENV) >= 0) {
+let DD_ENV = process.env.DD_ENV;
+if (DD_ENV === 'stage' || DD_ENV === 'prod') {
   tracer.init();
 }
 

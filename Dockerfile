@@ -10,7 +10,6 @@ RUN apk add redis
 RUN echo '%wheel ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/50-wheel
 RUN addgroup node wheel
 
-
 # Work from a less privileged user.
 USER node
 
