@@ -1,12 +1,10 @@
 import tracer from 'dd-trace';
 import { Env } from './config/constants';
 
-const IS_DEVELOPMENT = process.env.NODE_ENV !== Env.Production;
-
-// Turn on DataDog APM when in production environment.
-
-if (!IS_DEVELOPMENT) {
-  tracer.init(); // initialized in a different file to avoid hoisting.
+// Turn on DataDog APM when DD_ENV is stage or prod.
+const DATADOG_ENVS = ['stage', 'prod'];
+if (DATADOG_ENVS.indexOf(process.env.DD_ENV) >= 0) {
+  tracer.init();
 }
 
 export default tracer;
