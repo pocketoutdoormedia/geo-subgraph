@@ -102,7 +102,7 @@ workflows:
             branches:
               only: main
 
-      - hold-for-approval:
+      - approve-production-release:
           type: approval
           requires:
             - publish-subgraph-staging
@@ -110,7 +110,7 @@ workflows:
       - validate-subgraph:
           context: prod
           requires:
-            - hold-for-approval
+            - approve-production-release
           filters:
             branches:
               only: main
