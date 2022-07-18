@@ -124,6 +124,7 @@ workflows:
               only: main
 
       - publish-subgraph:
+          name: publish-subgraph-prod
           context: prod
           requires:
             - build-and-deploy
